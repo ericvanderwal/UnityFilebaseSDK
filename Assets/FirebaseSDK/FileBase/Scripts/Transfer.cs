@@ -26,25 +26,11 @@ namespace FileBase
             }
 
 
-            // set paths
-            var path = Application.persistentDataPath + "/" + bucketName;
-            var pathFile = path + "/" + objectKeyName;
+            // set paths. Return null if fail.
+            var pathFile = FileBase.Utils.GeneratePath(bucketName, objectKeyName);
+            if (string.IsNullOrEmpty(pathFile)) return null;
 
-            // create a directory if it doesnt exist
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-                Debug.Log("New directory created");
-            }
-
-            // check if file exists before write
-            if (File.Exists(pathFile))
-            {
-                Debug.Log("File already exists");
-                return null;
-            }
-
-            try
+                try
             {
                 // Create a GetObject request
                 var request = new GetObjectRequest
@@ -87,6 +73,7 @@ namespace FileBase
                 return null;
             }
         }
+        
 
         /// <summary>
         /// Upload object to bucket by objectKeyName and bucket.
@@ -158,7 +145,7 @@ namespace FileBase
 
                 PutObjectResponse response = await client.PutObjectAsync(putObjectRequest);
 
-                Debug.Log("File Uploaded ");
+             //   Debug.Log("File Uploaded ");
 
                 return true;
             }

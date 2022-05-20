@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using Amazon.S3;
@@ -69,6 +70,35 @@ namespace FileBase
         {
             string cid = await GetCid(client, bucketName, objectKeyName);
             return string.IsNullOrEmpty(cid) ? null : Paths.FileBase + cid;
+        }
+        
+        /// <summary>
+        /// Generate a path by bucket name and object key name including the application persistant data path.
+        /// </summary>
+        /// <param name="bucketName"></param>
+        /// <param name="objectKeyName"></param>
+        /// <returns></returns>
+        public static string GeneratePath(string bucketName, string objectKeyName)
+        {
+            var path = Application.persistentDataPath + "/" + bucketName;
+            var pathFile = path + "/" + objectKeyName;
+
+            // create a directory if it doesnt exist
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                Debug.Log("New directory created");
+            }
+
+            
+            // check if file exists before write
+            if (File.Exists(pathFile))
+            {
+                Debug.LogError("File already exists");
+                return null;
+            }
+
+            return pathFile;
         }
         
     }
