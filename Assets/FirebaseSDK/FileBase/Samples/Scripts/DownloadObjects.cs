@@ -49,15 +49,17 @@ public class DownloadObjects : MonoBehaviour
         }
 
         // always remember to wrap calls in try catch statements in case an uncaught exception occurs
-        catch (AggregateException aggregateException)
+        catch (Exception e)
         {
-            foreach (var innerException in aggregateException.InnerExceptions)
-            {
-                Debug.LogError(innerException.Message);
-            }
+            Debug.LogError(e.Message);
         }
     }
 
+    /// <summary>
+    /// Display the progress of the download
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private static void DisplayProgress(object sender, WriteObjectProgressArgs e)
     {
         Debug.Log("Progress : " + e.PercentDone);

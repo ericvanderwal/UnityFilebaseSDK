@@ -10,6 +10,15 @@ namespace FileBase
     public static class Transfer
     {
         //todo add ability to overwrite object
+        /// <summary>
+        /// Download an object from filebase by passing the bucket and object key (name).
+        /// Returns a filebase object and stores the file at filebase.Localpath
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="bucketName"></param>
+        /// <param name="objectKeyName"></param>
+        /// <param name="displayProgress"></param>
+        /// <returns></returns>
         public static async Task<FileBaseObject> DownloadObjectFromBucket(AmazonS3Client client, string bucketName,
             string objectKeyName, EventHandler<WriteObjectProgressArgs> displayProgress = null)
         {
@@ -25,12 +34,11 @@ namespace FileBase
                 return null;
             }
 
-
             // set paths. Return null if fail.
             var pathFile = FileBase.Utils.GeneratePath(bucketName, objectKeyName);
             if (string.IsNullOrEmpty(pathFile)) return null;
 
-                try
+            try
             {
                 // Create a GetObject request
                 var request = new GetObjectRequest
@@ -48,6 +56,7 @@ namespace FileBase
                     response.WriteObjectProgressEvent += displayProgress;
                 }
 
+                // do the actual file downloading
                 await response.WriteResponseStreamToFileAsync(pathFile, false, System.Threading.CancellationToken.None);
 
                 FileBaseObject fileBaseObject = new FileBaseObject();
@@ -73,7 +82,7 @@ namespace FileBase
                 return null;
             }
         }
-        
+
 
         /// <summary>
         /// Upload object to bucket by objectKeyName and bucket.
@@ -119,14 +128,11 @@ namespace FileBase
         public static async Task<bool> UploadObjectToBucketByPath(AmazonS3Client client, string bucketName,
             string objectKeyName, string path)
         {
-
             if (client == null)
             {
                 Debug.LogError("A valid client is required to upload a file. Are your credentials correct?");
             }
-            
-            
-            
+
             // check if file exists before read
             if (!File.Exists(path))
             {
@@ -144,9 +150,7 @@ namespace FileBase
                 };
 
                 PutObjectResponse response = await client.PutObjectAsync(putObjectRequest);
-
-             //   Debug.Log("File Uploaded ");
-
+                
                 return true;
             }
 

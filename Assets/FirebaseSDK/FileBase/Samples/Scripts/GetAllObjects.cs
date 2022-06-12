@@ -23,25 +23,19 @@ public class GetAllObjects : MonoBehaviour
         await GetAllObjectsAndPrint(client);
     }
 
-    // private static void DisplayProgress(object sender, WriteObjectProgressArgs e)
-    // {
-    //     Debug.Log("Progress : " + e.PercentDone);
-    // }
-
-
     /// <summary>
-    /// Get all objects listed in bucket define by name. Debug log each object key to the unity debug console.
+    /// Get all objects listed in buckets by name. Debug log each object key to the unity debug console.
     /// </summary>
     /// <param name="client"></param>
     private async Task GetAllObjectsAndPrint(AmazonS3Client client)
     {
         try
         {
-            List<S3Object> BucketObjects = await FileBase.Bucket.GetAllObjectsInBucket(client, bucketName);
+            List<S3Object> bucketObjects = await FileBase.Bucket.GetAllObjectsInBucket(client, bucketName);
 
 
             // make sure the bucket is not empty
-            if (BucketObjects == null || BucketObjects.Count == 0)
+            if (bucketObjects == null || bucketObjects.Count == 0)
             {
                 Debug.Log("No objects were found in this bucket");
                 return;
@@ -49,19 +43,16 @@ public class GetAllObjects : MonoBehaviour
 
 
             // debug log all the objects stored in this bucket by key
-            for (var index = 0; index < BucketObjects.Count; index++)
+            for (var index = 0; index < bucketObjects.Count; index++)
             {
-                Debug.Log("Object " + index + " : " + BucketObjects[index].Key);
+                Debug.Log("Object " + index + " : " + bucketObjects[index].Key);
             }
         }
 
         // always remember to wrap calls in try catch statements in case an uncaught exception occurs
-        catch (AggregateException aggregateException)
+        catch (Exception e)
         {
-            foreach (var innerException in aggregateException.InnerExceptions)
-            {
-                Debug.LogError(innerException.Message);
-            }
+            Debug.LogError(e.Message);
         }
     }
 }

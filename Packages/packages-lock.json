@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.caseydecoder.doxygengenerator": {
+      "version": "https://github.com/Casey-Hofland/DoxygenGenerator.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0bac2f62fcb0acd970bcfc04515fdc1519b6d54f"
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.4",
       "depth": 0,

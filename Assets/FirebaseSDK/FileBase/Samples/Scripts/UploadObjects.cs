@@ -42,12 +42,9 @@ public class UploadObjects : MonoBehaviour
         }
 
         // always remember to wrap calls in try catch statements in case an uncaught exception occurs
-        catch (AggregateException aggregateException)
+        catch (Exception e)
         {
-            foreach (var innerException in aggregateException.InnerExceptions)
-            {
-                Debug.LogError(innerException.Message);
-            }
+            Debug.LogError(e.Message);
         }
     }
 }

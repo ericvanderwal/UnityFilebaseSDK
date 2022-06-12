@@ -10,6 +10,10 @@ namespace FileBase
     public static class Utils
     {
         
+        /// <summary>
+        /// Get S3 client setup for filebase using information stored in Filebase.Paths
+        /// </summary>
+        /// <returns></returns>
         public static AmazonS3Client GetClient()
         {
             AmazonS3Config s3Config = new AmazonS3Config
@@ -82,7 +86,7 @@ namespace FileBase
         {
             var path = Application.persistentDataPath + "/" + bucketName;
             var pathFile = path + "/" + objectKeyName;
-
+            
             // create a directory if it doesnt exist
             if (!Directory.Exists(path))
             {
@@ -94,7 +98,7 @@ namespace FileBase
             // check if file exists before write
             if (File.Exists(pathFile))
             {
-                Debug.LogError("File already exists");
+                Debug.LogError("File already exists at " + pathFile);
                 return null;
             }
 
